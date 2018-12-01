@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_user_logged_in, only: [:index, :show, :followings, :followers]
+
   def index
     @users = User.all.page(params[:page])
   end
@@ -24,7 +25,8 @@ class UsersController < ApplicationController
       flash.now[:danger] = 'ユーザの登録に失敗しました。'
       render :new
     end
-    
+  end
+
   def followings
     @user = User.find(params[:id])
     @followings = @user.followings.page(params[:page])
@@ -36,27 +38,10 @@ class UsersController < ApplicationController
     @followers = @user.followers.page(params[:page])
     counts(@user)
   end
-    
-  end
-  
+
   private
-  
+
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
-  end
-  
-end
-
-class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
-
-  include SessionsHelper
-
-  private
-
-  def require_user_logged_in
-    unless logged_in?
-      redirect_to login_url
-    end
   end
 end
