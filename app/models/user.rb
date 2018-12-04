@@ -33,17 +33,20 @@ class User < ApplicationRecord
   
   # お気に入り機能
   has_many :relationship2s
-  has_many :lovers, through: :relationship2s, source: :micropost
+  has_many :likes, through: :relationship2s, source: :micropost
   has_many :reverses_of_relationship2, class_name: 'Relationship2', foreign_key: 'micropost_id'
-  has_many :belovers, through: :reverses_of_relationship2, source: :user
   
-  def likes(other_user)
+  def like(other_user)
       self.relationship2s.find_or_create_by(micropost_id:other_user.id)
   end
 
-  def dislikes(other_user)
+  def dislike(other_user)
     relationship2 = self.relationship2s.find_by(micropost_id:other_user.id)
     relationship2.destroy if relationship2
+  end
+  
+  def likes?(other_user)
+    self.likes.include?(other_user)
   end
   
 end
