@@ -12,6 +12,6 @@ class Relationship2sController < ApplicationController
     micropost = Micropost.find(params[:micropost_id])
     current_user.dislike(micropost)
     flash[:success] = 'お気に入りを解除しました。'
-    redirect_to user
+    redirect_to :back
   end
 end
